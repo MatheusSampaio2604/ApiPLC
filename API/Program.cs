@@ -14,7 +14,7 @@ namespace API
 
             builder.Services.AddControllers();
 
-            builder.Services.Configure<Plc>(builder.Configuration.GetSection("PlcSettings"));
+            builder.Services.Configure<PlcSettings>(builder.Configuration.GetSection("PlcSettings"));
             builder.Services.AddSingleton<PlcService>();
 
             // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
