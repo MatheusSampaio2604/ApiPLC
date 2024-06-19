@@ -1,8 +1,8 @@
-﻿using API.Models;
+﻿using Domain.Models;
 using Microsoft.Extensions.Options;
 using S7.Net;
 
-namespace API.Services
+namespace Application.Services
 {
     public class PlcService
     {
