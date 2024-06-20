@@ -1,6 +1,6 @@
 
-using API.Models;
-using API.Services;
+using Domain.Models;
+using Application.Services;
 
 namespace API
 {

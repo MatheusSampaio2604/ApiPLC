@@ -1,10 +1,11 @@
-﻿using Domain.Models;
+﻿using Application.Services.Interfaces;
+using Domain.Models;
 using Microsoft.Extensions.Options;
 using S7.Net;
 
 namespace Application.Services
 {
-    public class PlcService
+    public class PlcService : InterPlcService
     {
         private readonly Plc _plc;
 
@@ -51,5 +52,10 @@ namespace Application.Services
             await WriteAsync(addressplc, newValue);
         }
 
+        public async Task<IEnumerable<WriteRequest>> GetListPlc()
+        {
+            IEnumerable<WriteRequest> list = [];
+            return list;
+        }
     }
 }

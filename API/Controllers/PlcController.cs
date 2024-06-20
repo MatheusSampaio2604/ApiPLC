@@ -1,4 +1,5 @@
 ﻿using Application.Services;
+using Application.Services.Interfaces;
 using Domain.Models;
 using Microsoft.AspNetCore.Mvc;
 
@@ -11,9 +12,9 @@ namespace API.Controllers
     [ApiController]
     public class PlcController : ControllerBase
     {
-        private readonly PlcService _plcService;
+        private readonly InterPlcService _plcService;
 
-        public PlcController(PlcService plcService)
+        public PlcController(InterPlcService plcService)
         {
             _plcService = plcService;
         }
@@ -27,6 +28,12 @@ namespace API.Controllers
         {
             await _plcService.ConnectAsync();
             return Ok("Connected to PLC");
+        }
+
+        [HttpGet("GetListPlc")]
+        public async Task<IActionResult> GetListPlc()
+        {
+            return Ok(await _plcService.GetListPlc());
         }
 
         /// <summary>
