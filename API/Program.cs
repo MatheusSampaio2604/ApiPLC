@@ -1,6 +1,10 @@
 
 using Domain.Models;
 using Application.Services;
+using Domain.Repository.Interface;
+using Domain.Repository;
+using S7.Net.Types;
+using Application.Services.Interfaces;
 
 namespace API
 {
@@ -15,7 +19,12 @@ namespace API
             builder.Services.AddControllers();
 
             builder.Services.Configure<PlcSettings>(builder.Configuration.GetSection("PlcSettings"));
-            builder.Services.AddSingleton<PlcService>();
+            builder.Services.AddSingleton<InterPlcService,PlcService>();
+
+            builder.Services.AddTransient<InterJsonService,JsonService>();
+
+            builder.Services.AddSingleton<IGeneralJsonRepository, GeneralJsonRepositoy>(provider => 
+                new GeneralJsonRepositoy(Path.Combine(Directory.GetCurrentDirectory(), "..","Infrastructure", "Archives", "PlcsConfigured.json")));
 
             // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
             builder.Services.AddEndpointsApiExplorer();

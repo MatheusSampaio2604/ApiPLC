@@ -2,6 +2,7 @@
 using Application.Services.Interfaces;
 using Domain.Models;
 using Microsoft.AspNetCore.Mvc;
+using S7.Net.Types;
 
 namespace API.Controllers
 {
@@ -13,10 +14,12 @@ namespace API.Controllers
     public class PlcController : ControllerBase
     {
         private readonly InterPlcService _plcService;
+        private readonly InterJsonService _interJsonService;
 
-        public PlcController(InterPlcService plcService)
+        public PlcController(InterPlcService plcService, InterJsonService interJsonService)
         {
             _plcService = plcService;
+            _interJsonService = interJsonService;
         }
 
         /// <summary>
@@ -28,12 +31,6 @@ namespace API.Controllers
         {
             await _plcService.ConnectAsync();
             return Ok("Connected to PLC");
-        }
-
-        [HttpGet("GetListPlc")]
-        public async Task<IActionResult> GetListPlc()
-        {
-            return Ok(await _plcService.GetListPlc());
         }
 
         /// <summary>
@@ -116,6 +113,48 @@ namespace API.Controllers
         {
             await _plcService.StartStop(request.AddressPlc);
             return Ok("Toggled value successfully");
+        }
+
+
+        /// <summary>
+        /// List all plcs in archive
+        /// </summary>
+        /// <returns></returns>
+        [HttpGet("GetListPlc")]
+        public IActionResult GetListPlc()
+        {
+            try
+            {
+                var plcConfigureds = _interJsonService.LoadItem();
+                if (plcConfigureds == null || !plcConfigureds.Any())
+                    return NotFound();
+                
+                return Ok(plcConfigureds);
+            }
+            catch (Exception e)
+            {
+                return BadRequest(e.Message);
+            }
+        }
+
+        /// <summary>
+        /// Save informations in json archive
+        /// </summary>
+        /// <param name="plcConfigured"></param>
+        /// <returns></returns>
+        [HttpPost("SaveInListPlc")]
+        public IActionResult Save([FromBody] List<PlcConfigured> plcConfigured)
+        {
+            try
+            {
+                _interJsonService.SaveItem(plcConfigured);
+
+                return Ok("Success!");
+            }
+            catch (Exception e)
+            {
+                return BadRequest(e.Message);
+            }
         }
     }
 

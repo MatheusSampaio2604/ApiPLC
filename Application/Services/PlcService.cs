@@ -51,11 +51,5 @@ namespace Application.Services
             bool newValue = !currentValue;
             await WriteAsync(addressplc, newValue);
         }
-
-        public async Task<IEnumerable<WriteRequest>> GetListPlc()
-        {
-            IEnumerable<WriteRequest> list = [];
-            return list;
-        }
     }
 }

@@ -15,6 +15,5 @@ namespace Application.Services.Interfaces
         Task WriteAsync<T>(string addressplc, T value);
         Task StartStop(string addressplc);
 
-        Task<IEnumerable<WriteRequest>> GetListPlc();
     }
 }
