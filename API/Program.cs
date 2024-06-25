@@ -18,13 +18,13 @@ namespace API
 
             builder.Services.AddControllers();
 
-            builder.Services.Configure<PlcSettings>(builder.Configuration.GetSection("PlcSettings"));
-            builder.Services.AddSingleton<InterPlcService,PlcService>();
+            //builder.Services.Configure<PlcSettings>(builder.Configuration.GetSection("PlcSettings"));
+            builder.Services.AddSingleton<InterPlcService, PlcService>();
+            builder.Services.AddTransient<InterJsonService, JsonService>();
 
-            builder.Services.AddTransient<InterJsonService,JsonService>();
+            builder.Services.AddSingleton<IPlcsJsonRepository, PlcsJsonRepositoy>(provider => new PlcsJsonRepositoy(Path.Combine(Directory.GetCurrentDirectory(), "..", "Infrastructure", "Archives", "PlcsConfigured.json")));
+            builder.Services.AddSingleton<IPlcSettingsJsonRepository, PlcSettingsJsonRepository>(provider => new PlcSettingsJsonRepository(Path.Combine(Directory.GetCurrentDirectory(), "..", "Infrastructure", "Archives", "PlcSetting.json")));
 
-            builder.Services.AddSingleton<IGeneralJsonRepository, GeneralJsonRepositoy>(provider => 
-                new GeneralJsonRepositoy(Path.Combine(Directory.GetCurrentDirectory(), "..","Infrastructure", "Archives", "PlcsConfigured.json")));
 
             // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
             builder.Services.AddEndpointsApiExplorer();
@@ -33,11 +33,9 @@ namespace API
             var app = builder.Build();
 
             // Configure the HTTP request pipeline.
-            if (app.Environment.IsDevelopment())
-            {
-                app.UseSwagger();
-                app.UseSwaggerUI();
-            }
+
+            app.UseSwagger();
+            app.UseSwaggerUI();
 
             app.UseHttpsRedirection();
 

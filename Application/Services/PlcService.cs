@@ -1,5 +1,6 @@
 ﻿using Application.Services.Interfaces;
 using Domain.Models;
+using Domain.Repository.Interface;
 using Microsoft.Extensions.Options;
 using S7.Net;
 
@@ -9,22 +10,24 @@ namespace Application.Services
     {
         private readonly Plc _plc;
 
-        public PlcService(IOptions<PlcSettings> plcSettings)
+        public PlcService(IPlcSettingsJsonRepository plcSettingsRepository)
         {
-            var settings = plcSettings.Value;
-            var cpuType = (CpuType)Enum.Parse(typeof(CpuType), settings.CpuType, true);
+            PlcSettings settings = plcSettingsRepository.GetSettingsPlc();
+            if (settings == null)
+                throw new ArgumentNullException(nameof(settings), "PLC settings cannot be null");
+            CpuType cpuType = (CpuType)Enum.Parse(typeof(CpuType), settings.CpuType, true);
             _plc = new Plc(cpuType, settings.Ip1, settings.Rack, settings.Slot);
         }
 
         private async Task EnsureConnectedAsync()
         {
             if (!_plc.IsConnected)
-               await Task.Run(() => _plc.Open());
+                await Task.Run(() => _plc.Open());
         }
 
         public async Task ConnectAsync()
         {
-           await Task.Run(() => _plc.Open());
+            await Task.Run(() => _plc.Open());
         }
 
         public void Disconnect()

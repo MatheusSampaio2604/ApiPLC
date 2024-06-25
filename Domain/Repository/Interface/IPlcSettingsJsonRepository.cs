@@ -7,9 +7,9 @@ using System.Threading.Tasks;
 
 namespace Domain.Repository.Interface
 {
-    public interface IGeneralJsonRepository
+    public interface IPlcSettingsJsonRepository
     {
-        void Save(List<PlcConfigured> obj);
-        List<PlcConfigured?> Load();
+        PlcSettings GetSettingsPlc();
+        void UpdateSettingsPlc(PlcSettings plc);
     }
 }

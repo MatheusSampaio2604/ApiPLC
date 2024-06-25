@@ -26,11 +26,18 @@ namespace API.Controllers
         /// Inicia uma conexão com o PLC
         /// </summary>
         /// <returns></returns>
-        [HttpGet("connect")]
+        [HttpGet("TestConnectionPlc")]
         public async Task<IActionResult> Connect()
         {
-            await _plcService.ConnectAsync();
-            return Ok("Connected to PLC");
+            try
+            {
+                await _plcService.ConnectAsync();
+                return Ok(true);
+            }
+            catch (Exception)
+            {
+                return Ok(false);
+            }
         }
 
         /// <summary>
@@ -52,7 +59,7 @@ namespace API.Controllers
         [HttpGet("read/{addressplc}")]
         public async Task<IActionResult> Read(string addressplc)
         {
-            var result = await _plcService.ReadAsync<object>(addressplc);
+            object? result = await _plcService.ReadAsync<object>(addressplc);
             return Ok(result);
         }
 
@@ -66,6 +73,15 @@ namespace API.Controllers
         {
             object data = Empty;
 
+            if (request == null)
+                return BadRequest("Request cannot be null.");
+
+            if (string.IsNullOrWhiteSpace(request.Type))
+                return BadRequest("Type cannot be null or empty.");
+
+            if (string.IsNullOrWhiteSpace(request.AddressPlc))
+                return BadRequest("AddressPlc cannot be null or empty.");
+
             try
             {
                 switch (request.Type.ToLower())
@@ -73,7 +89,6 @@ namespace API.Controllers
                     case "bool":
                         if (request.Value is bool boolValue) data = boolValue;
                         else if (bool.TryParse(request.Value?.ToString(), out bool parsedBool)) data = parsedBool;
-                        else return BadRequest("Invalid value type for bool.");
                         break;
                     case "int":
                         if (request.Value is int intValue) data = intValue;
@@ -85,17 +100,15 @@ namespace API.Controllers
                         else if (double.TryParse(request.Value?.ToString(), out double parsedDouble)) data = parsedDouble;
                         break;
 
-                    
                     default:
                         return BadRequest("Unsupported type.");
                 }
 
-                var result = await _plcService.WriteAsync(request.AddressPlc, data);
+                bool result = await _plcService.WriteAsync(request.AddressPlc, data);
                 return Ok(result);
             }
             catch (Exception ex)
             {
-                // Log the exception (not shown here)
                 return StatusCode(500, $"Internal server error: {ex.Message}");
             }
         }
@@ -113,19 +126,6 @@ namespace API.Controllers
             return Ok("Toggled value successfully");
         }
 
-
-
-
-
-
-
-
-
-
-
-
-
-
         /// <summary>
         /// List all plcs in archive
         /// </summary>
@@ -135,10 +135,10 @@ namespace API.Controllers
         {
             try
             {
-                var plcConfigureds = _interJsonService.LoadItem();
+                List<PlcConfigured?> plcConfigureds = _interJsonService.LoadItem();
                 if (plcConfigureds == null || !plcConfigureds.Any())
                     return NotFound();
-                
+
                 return Ok(plcConfigureds);
             }
             catch (Exception e)
@@ -148,7 +148,7 @@ namespace API.Controllers
         }
 
         /// <summary>
-        /// Save informations in json archive
+        /// Save informations in Plc list archive
         /// </summary>
         /// <param name="plcConfigured"></param>
         /// <returns></returns>
@@ -186,39 +186,40 @@ namespace API.Controllers
         }
 
 
-        //[HttpPut("{id}/UpdateSettingsPlc")]
-        //public IActionResult UpdateSettingsPlc(int id, [FromBody] PlcSettings settings)
-        //{
-        //    try
-        //    {
-        //        _interJsonService.UpdateTag(id, settings);
-        //        return Ok("Tag address updated successfully.");
-        //    }
-        //    catch (ArgumentException ex)
-        //    {
-        //        return NotFound(ex.Message);
-        //    }
-        //    catch (Exception ex)
-        //    {
-        //        return StatusCode(500, ex.Message);
-        //    }
-        //}
+        [HttpPost("UpdateSettingsPlc")]
+        public IActionResult UpdateSettingsPlc([FromBody] PlcSettings settings)
+        {
+            try
+            {
+                _interJsonService.UpdateSettingsPlc(settings);
+                return Ok("Tag address updated successfully.");
+            }
+            catch (ArgumentException ex)
+            {
+                return NotFound(ex.Message);
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(500, ex.Message);
+            }
+        }
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+        [HttpGet("GetSettingsPlc")]
+        public IActionResult GetSettingsPlc()
+        {
+            try
+            {
+                PlcSettings data = _interJsonService.GetSettingsPlc();
+                return Ok(data);
+            }
+            catch (ArgumentException ex)
+            {
+                return NotFound(ex.Message);
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(500, ex.Message);
+            }
+        }
     }
-
 }

@@ -8,6 +8,11 @@
         public required short Slot { get; set; }
     }
 
+    public class PlcSettingsWrapper
+    {
+        public required PlcSettings PlcSettings { get; set; }
+    }
+
     public class StartStopRequest
     {
         public required string AddressPlc { get; set; }
@@ -28,7 +33,6 @@
         public required string Type { get; set; }
         public object? Value { get; set; }
 
-        //more itens here!!!
     }
 
 
