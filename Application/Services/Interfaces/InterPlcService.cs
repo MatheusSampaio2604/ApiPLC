@@ -12,7 +12,7 @@ namespace Application.Services.Interfaces
         Task ConnectAsync(); 
         void Disconnect();
         Task<T?> ReadAsync<T>(string addressplc);
-        Task WriteAsync<T>(string addressplc, T value);
+        Task<bool> WriteAsync<T>(string addressplc, T value);
         Task StartStop(string addressplc);
 
     }

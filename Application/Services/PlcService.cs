@@ -38,10 +38,18 @@ namespace Application.Services
             return await Task.Run(() => (T?)_plc.Read(addressplc));
         }
 
-        public async Task WriteAsync<T>(string addressplc, T value)
+        public async Task<bool> WriteAsync<T>(string addressplc, T value)
         {
-            await EnsureConnectedAsync();
-            await Task.Run(() => _plc.Write(addressplc, value));
+            try
+            {
+                await EnsureConnectedAsync();
+                await Task.Run(() => _plc.Write(addressplc, value));
+                return true;
+            }
+            catch (Exception)
+            {
+                return false;
+            }
         }
 
         public async Task StartStop(string addressplc)

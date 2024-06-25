@@ -64,7 +64,7 @@ namespace API.Controllers
         [HttpPost("write")]
         public async Task<IActionResult> Write(WriteRequest request)
         {
-            object data;
+            object data = Empty;
 
             try
             {
@@ -78,22 +78,20 @@ namespace API.Controllers
                     case "int":
                         if (request.Value is int intValue) data = intValue;
                         else if (int.TryParse(request.Value?.ToString(), out int parsedInt)) data = parsedInt;
-                        else return BadRequest("Invalid value type for int.");
                         break;
 
                     case "double":
                         if (request.Value is double doubleValue) data = doubleValue;
                         else if (double.TryParse(request.Value?.ToString(), out double parsedDouble)) data = parsedDouble;
-                        else return BadRequest("Invalid value type for double.");
                         break;
 
-                    // Adicione outros tipos conforme necessário
+                    
                     default:
                         return BadRequest("Unsupported type.");
                 }
 
-                await _plcService.WriteAsync(request.AddressPlc, data);
-                return Ok("Write successful");
+                var result = await _plcService.WriteAsync(request.AddressPlc, data);
+                return Ok(result);
             }
             catch (Exception ex)
             {
@@ -114,6 +112,18 @@ namespace API.Controllers
             await _plcService.StartStop(request.AddressPlc);
             return Ok("Toggled value successfully");
         }
+
+
+
+
+
+
+
+
+
+
+
+
 
 
         /// <summary>
@@ -156,6 +166,59 @@ namespace API.Controllers
                 return BadRequest(e.Message);
             }
         }
+
+        [HttpPut("{id}/updateTag")]
+        public IActionResult UpdateTag(int id, [FromBody] PlcConfigured plc)
+        {
+            try
+            {
+                _interJsonService.UpdateTag(id, plc);
+                return Ok("Tag address updated successfully.");
+            }
+            catch (ArgumentException ex)
+            {
+                return NotFound(ex.Message);
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(500, ex.Message);
+            }
+        }
+
+
+        //[HttpPut("{id}/UpdateSettingsPlc")]
+        //public IActionResult UpdateSettingsPlc(int id, [FromBody] PlcSettings settings)
+        //{
+        //    try
+        //    {
+        //        _interJsonService.UpdateTag(id, settings);
+        //        return Ok("Tag address updated successfully.");
+        //    }
+        //    catch (ArgumentException ex)
+        //    {
+        //        return NotFound(ex.Message);
+        //    }
+        //    catch (Exception ex)
+        //    {
+        //        return StatusCode(500, ex.Message);
+        //    }
+        //}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
     }
 
 }

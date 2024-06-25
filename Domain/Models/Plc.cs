@@ -23,6 +23,7 @@
     public class PlcConfigured
     {
         public int Id { get; set; }
+        public required string Name { get; set; }
         public required string AddressPlc { get; set; }
         public required string Type { get; set; }
         public object? Value { get; set; }
