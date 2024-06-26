@@ -16,19 +16,33 @@ namespace API
 
             // Add services to the container.
 
+            builder.WebHost.ConfigureKestrel((context, options) =>
+            {
+                options.Configure(context.Configuration.GetSection("Kestrel"));
+            });
+
             builder.Services.AddControllers();
 
             //builder.Services.Configure<PlcSettings>(builder.Configuration.GetSection("PlcSettings"));
             builder.Services.AddSingleton<InterPlcService, PlcService>();
             builder.Services.AddTransient<InterJsonService, JsonService>();
 
-            builder.Services.AddSingleton<IPlcsJsonRepository, PlcsJsonRepositoy>(provider => new PlcsJsonRepositoy(Path.Combine(Directory.GetCurrentDirectory(), "..", "Infrastructure", "Archives", "PlcsConfigured.json")));
+            builder.Services.AddSingleton<IPlcsJsonRepository, PlcsJsonRepositoy>(provider => new PlcsJsonRepositoy(Path.Combine(Directory.GetCurrentDirectory(), "..", "Infrastructure", "Archives", "PlcsInUse.json")));
             builder.Services.AddSingleton<IPlcSettingsJsonRepository, PlcSettingsJsonRepository>(provider => new PlcSettingsJsonRepository(Path.Combine(Directory.GetCurrentDirectory(), "..", "Infrastructure", "Archives", "PlcSetting.json")));
 
 
             // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
             builder.Services.AddEndpointsApiExplorer();
             builder.Services.AddSwaggerGen();
+
+
+            builder.Services.AddCors(options =>
+            {
+                options.AddDefaultPolicy(builder =>
+                {
+                    builder.AllowAnyOrigin().AllowAnyMethod().AllowAnyHeader();
+                });
+            });
 
             var app = builder.Build();
 
@@ -37,12 +51,15 @@ namespace API
             app.UseSwagger();
             app.UseSwaggerUI();
 
-            app.UseHttpsRedirection();
+            //app.UseHttpsRedirection();
 
             app.UseAuthorization();
             app.UseAuthentication();
 
             app.MapControllers();
+
+            // Configure o middleware CORS
+            app.UseCors();
 
             app.Run();
         }

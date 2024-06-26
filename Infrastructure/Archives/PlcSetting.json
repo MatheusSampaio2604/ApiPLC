@@ -1,1 +1,8 @@
-{"PlcSettings":{"Ip1":"192.168.15.12","CpuType":"S71500","Rack":0,"Slot":1}}
+{
+  "PlcSettings": {
+    "Ip1": "192.168.15.12",
+    "CpuType": "S71500",
+    "Rack": 0,
+    "Slot": 1
+  }
+}

@@ -7,7 +7,7 @@ using S7.Net.Types;
 namespace API.Controllers
 {
     /// <summary>
-    /// OBS.: Todas as requisições tentam executar automaticamente uma conexão com o servidor!
+    /// NOTE: All requests automatically attempt to connect to the server!
     /// </summary>
     [Route("api/[controller]")]
     [ApiController]
@@ -23,7 +23,7 @@ namespace API.Controllers
         }
 
         /// <summary>
-        /// Inicia uma conexão com o PLC
+        /// Starts a connection to the PLC
         /// </summary>
         /// <returns></returns>
         [HttpGet("TestConnectionPlc")]
@@ -41,7 +41,7 @@ namespace API.Controllers
         }
 
         /// <summary>
-        /// Encerra a conexão com o PLC
+        /// Closes the connection with the PLC
         /// </summary>
         /// <returns></returns>
         [HttpGet("disconnect")]
@@ -52,7 +52,7 @@ namespace API.Controllers
         }
 
         /// <summary>
-        /// Executa a leitura de um valor no PLC
+        /// Reads a value on the PLC
         /// </summary>
         /// <param name="addressplc"></param>
         /// <returns></returns>
@@ -64,7 +64,7 @@ namespace API.Controllers
         }
 
         /// <summary>
-        /// Executa a escrita de um novo valor no PLC
+        /// Writes a new value to the PLC
         /// </summary>
         /// <param name="request"></param>
         /// <returns></returns>
@@ -94,7 +94,6 @@ namespace API.Controllers
                         if (request.Value is int intValue) data = intValue;
                         else if (int.TryParse(request.Value?.ToString(), out int parsedInt)) data = parsedInt;
                         break;
-
                     case "double":
                         if (request.Value is double doubleValue) data = doubleValue;
                         else if (double.TryParse(request.Value?.ToString(), out double parsedDouble)) data = parsedDouble;
@@ -115,7 +114,7 @@ namespace API.Controllers
 
 
         /// <summary>
-        /// Alterna entre os valores 0 e 1
+        /// Toggles between values ​​0 and 1
         /// </summary>
         /// <param name="request"></param>
         /// <returns></returns>
@@ -135,7 +134,7 @@ namespace API.Controllers
         {
             try
             {
-                List<PlcConfigured?> plcConfigureds = _interJsonService.LoadItem();
+                List<PlcsInUse?> plcConfigureds = _interJsonService.LoadItem();
                 if (plcConfigureds == null || !plcConfigureds.Any())
                     return NotFound();
 
@@ -153,7 +152,7 @@ namespace API.Controllers
         /// <param name="plcConfigured"></param>
         /// <returns></returns>
         [HttpPost("SaveInListPlc")]
-        public IActionResult Save([FromBody] List<PlcConfigured> plcConfigured)
+        public IActionResult Save([FromBody] List<PlcsInUse> plcConfigured)
         {
             try
             {
@@ -167,8 +166,14 @@ namespace API.Controllers
             }
         }
 
+        /// <summary>
+        /// Up
+        /// </summary>
+        /// <param name="id"></param>
+        /// <param name="plc"></param>
+        /// <returns></returns>
         [HttpPut("{id}/updateTag")]
-        public IActionResult UpdateTag(int id, [FromBody] PlcConfigured plc)
+        public IActionResult UpdateTag(int id, [FromBody] PlcsInUse plc)
         {
             try
             {
@@ -185,7 +190,11 @@ namespace API.Controllers
             }
         }
 
-
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="settings"></param>
+        /// <returns></returns>
         [HttpPost("UpdateSettingsPlc")]
         public IActionResult UpdateSettingsPlc([FromBody] PlcSettings settings)
         {
@@ -204,6 +213,10 @@ namespace API.Controllers
             }
         }
 
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <returns></returns>
         [HttpGet("GetSettingsPlc")]
         public IActionResult GetSettingsPlc()
         {

@@ -9,6 +9,9 @@ using System.Threading.Tasks;
 
 namespace Domain.Repository
 {
+    /// <summary>
+    /// In program.cs, this service is only for "PlcSetting.Json"
+    /// </summary>
     public class PlcSettingsJsonRepository : IPlcSettingsJsonRepository
     {
         private readonly string _filePath;

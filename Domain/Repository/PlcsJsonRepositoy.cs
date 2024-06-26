@@ -9,6 +9,9 @@ using System.Threading.Tasks;
 
 namespace Domain.Repository
 {
+    /// <summary>
+    /// In program.cs, this service is only for "PlcsInUse.Json"
+    /// </summary>
     public class PlcsJsonRepositoy : IPlcsJsonRepository
     {
         private readonly string _filePath;
@@ -18,13 +21,13 @@ namespace Domain.Repository
             _filePath = filePath;
         }
 
-        public void Save(List<PlcConfigured> newItems)
+        public void Save(List<PlcsInUse> newItems)
         {
-            List<PlcConfigured?> existingItems = Load() ?? [];
+            List<PlcsInUse?> existingItems = Load() ?? [];
 
             foreach (var newItem in newItems)
             {
-                PlcConfigured? existingItem = existingItems.FirstOrDefault(i => i.Id == newItem.Id);
+                PlcsInUse? existingItem = existingItems.FirstOrDefault(i => i.Id == newItem.Id);
                 if (existingItem != null)
                 {
                     existingItem.Name = newItem.Name;
@@ -45,13 +48,13 @@ namespace Domain.Repository
         }
 
 
-        public List<PlcConfigured?> Load()
+        public List<PlcsInUse?> Load()
         {
             if(!File.Exists(_filePath))
                 return default;
 
             string jsonString = File.ReadAllText(_filePath);
-            return JsonSerializer.Deserialize<List<PlcConfigured>>(jsonString);
+            return JsonSerializer.Deserialize<List<PlcsInUse>>(jsonString);
         }
     }
 }

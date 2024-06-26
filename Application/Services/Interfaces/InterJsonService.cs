@@ -9,9 +9,9 @@ namespace Application.Services.Interfaces
 {
     public interface InterJsonService
     {
-        void SaveItem(List<PlcConfigured> item);
-        List<PlcConfigured?> LoadItem();
-        void UpdateTag(int id, PlcConfigured updatedPlcConfigured);
+        void SaveItem(List<PlcsInUse> item);
+        List<PlcsInUse?> LoadItem();
+        void UpdateTag(int id, PlcsInUse updatedPlcConfigured);
 
 
         PlcSettings GetSettingsPlc();

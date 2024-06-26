@@ -25,7 +25,7 @@
         public object? Value { get; set; }
     }
 
-    public class PlcConfigured
+    public class PlcsInUse
     {
         public int Id { get; set; }
         public required string Name { get; set; }

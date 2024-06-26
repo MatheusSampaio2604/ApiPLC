@@ -13,8 +13,7 @@ namespace Application.Services
         public PlcService(IPlcSettingsJsonRepository plcSettingsRepository)
         {
             PlcSettings settings = plcSettingsRepository.GetSettingsPlc();
-            if (settings == null)
-                throw new ArgumentNullException(nameof(settings), "PLC settings cannot be null");
+            
             CpuType cpuType = (CpuType)Enum.Parse(typeof(CpuType), settings.CpuType, true);
             _plc = new Plc(cpuType, settings.Ip1, settings.Rack, settings.Slot);
         }

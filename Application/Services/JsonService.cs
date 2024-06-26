@@ -20,24 +20,24 @@ namespace Application.Services
             _iPlcSettingsRepository = plcSettingsRepository;
         }
 
-        public void SaveItem(List<PlcConfigured> item)
+        public void SaveItem(List<PlcsInUse> item)
         {
             _iPlcsRepository.Save(item);
         }
 
-        public List<PlcConfigured?> LoadItem()
+        public List<PlcsInUse?> LoadItem()
         {
             return _iPlcsRepository.Load();
         }
 
-        public void UpdateTag(int id, PlcConfigured updatedPlcConfigured)
+        public void UpdateTag(int id, PlcsInUse updatedPlcConfigured)
         {
-            List<PlcConfigured?> items = _iPlcsRepository.Load();
+            List<PlcsInUse?> items = _iPlcsRepository.Load();
 
             if (items == null)
                 throw new Exception("Failed to load items from JSON file.");
 
-            PlcConfigured? itemToUpdate = items.FirstOrDefault(i => i.Id == id);
+            PlcsInUse? itemToUpdate = items.FirstOrDefault(i => i.Id == id);
             if (itemToUpdate != null)
             {
                 itemToUpdate.Name = updatedPlcConfigured.Name;

@@ -7,9 +7,12 @@ using System.Threading.Tasks;
 
 namespace Domain.Repository.Interface
 {
+    /// <summary>
+    /// In program.cs, this interface service is only for "PlcsInUse.Json"
+    /// </summary>
     public interface IPlcsJsonRepository
     {
-        void Save(List<PlcConfigured> obj);
-        List<PlcConfigured?> Load();
+        void Save(List<PlcsInUse> obj);
+        List<PlcsInUse?> Load();
     }
 }
