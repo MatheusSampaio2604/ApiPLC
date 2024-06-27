@@ -47,8 +47,15 @@ namespace API.Controllers
         [HttpGet("disconnect")]
         public IActionResult Disconnect()
         {
-            _plcService.Disconnect();
-            return Ok("Disconnected from PLC");
+            try
+            {
+                _plcService.Disconnect();
+                return Ok(true);
+            }
+            catch
+            {
+                return Ok(false);
+            }
         }
 
         /// <summary>
@@ -69,41 +76,36 @@ namespace API.Controllers
         /// <param name="request"></param>
         /// <returns></returns>
         [HttpPost("write")]
-        public async Task<IActionResult> Write(WriteRequest request)
+        public async Task<IActionResult> Write(List<WriteRequest> requests)
         {
             object data = Empty;
+            bool result = false;
 
-            if (request == null)
+            if (requests.Count ==0)
                 return BadRequest("Request cannot be null.");
-
-            if (string.IsNullOrWhiteSpace(request.Type))
-                return BadRequest("Type cannot be null or empty.");
-
-            if (string.IsNullOrWhiteSpace(request.AddressPlc))
-                return BadRequest("AddressPlc cannot be null or empty.");
 
             try
             {
-                switch (request.Type.ToLower())
+                foreach (var request in requests)
                 {
-                    case "bool":
-                        if (request.Value is bool boolValue) data = boolValue;
-                        else if (bool.TryParse(request.Value?.ToString(), out bool parsedBool)) data = parsedBool;
-                        break;
-                    case "int":
-                        if (request.Value is int intValue) data = intValue;
-                        else if (int.TryParse(request.Value?.ToString(), out int parsedInt)) data = parsedInt;
-                        break;
-                    case "double":
-                        if (request.Value is double doubleValue) data = doubleValue;
-                        else if (double.TryParse(request.Value?.ToString(), out double parsedDouble)) data = parsedDouble;
-                        break;
+                    switch (request.Type.ToLower())
+                    {
+                        case "bool":
+                            if (bool.TryParse(request.Value?.ToString(), out bool parsedBool)) data = parsedBool;
+                            break;
+                        case "int":
+                            if (int.TryParse(request.Value?.ToString(), out int parsedInt)) data = parsedInt;
+                            break;
+                        case "double":
+                            if (double.TryParse(request.Value?.ToString(), out double parsedDouble)) data = parsedDouble;
+                            break;
 
-                    default:
-                        return BadRequest("Unsupported type.");
+                        default:
+                            return BadRequest("Unsupported type.");
+                    }
+
+                    result = await _plcService.WriteAsync(request.AddressPlc, data);
                 }
-
-                bool result = await _plcService.WriteAsync(request.AddressPlc, data);
                 return Ok(result);
             }
             catch (Exception ex)
@@ -121,8 +123,15 @@ namespace API.Controllers
         [HttpPost("startstop")]
         public async Task<IActionResult> StartStop(StartStopRequest request)
         {
-            await _plcService.StartStop(request.AddressPlc);
-            return Ok("Toggled value successfully");
+            try
+            {
+                await _plcService.StartStop(request.AddressPlc);
+                return Ok(true);
+            }
+            catch
+            {
+                return Ok(false);
+            }
         }
 
         /// <summary>
@@ -135,8 +144,7 @@ namespace API.Controllers
             try
             {
                 List<PlcsInUse?> plcConfigureds = _interJsonService.LoadItem();
-                if (plcConfigureds == null || !plcConfigureds.Any())
-                    return NotFound();
+
 
                 return Ok(plcConfigureds);
             }
@@ -158,11 +166,11 @@ namespace API.Controllers
             {
                 _interJsonService.SaveItem(plcConfigured);
 
-                return Ok("Success!");
+                return Ok(true);
             }
-            catch (Exception e)
+            catch
             {
-                return BadRequest(e.Message);
+                return Ok(false);
             }
         }
 
@@ -173,20 +181,16 @@ namespace API.Controllers
         /// <param name="plc"></param>
         /// <returns></returns>
         [HttpPut("{id}/updateTag")]
-        public IActionResult UpdateTag(int id, [FromBody] PlcsInUse plc)
+        public IActionResult UpdateTag(int id, PlcsInUse plc)
         {
             try
             {
                 _interJsonService.UpdateTag(id, plc);
-                return Ok("Tag address updated successfully.");
+                return Ok(true);
             }
-            catch (ArgumentException ex)
+            catch
             {
-                return NotFound(ex.Message);
-            }
-            catch (Exception ex)
-            {
-                return StatusCode(500, ex.Message);
+                return Ok(false);
             }
         }
 
@@ -201,15 +205,11 @@ namespace API.Controllers
             try
             {
                 _interJsonService.UpdateSettingsPlc(settings);
-                return Ok("Tag address updated successfully.");
+                return Ok(true);
             }
-            catch (ArgumentException ex)
+            catch
             {
-                return NotFound(ex.Message);
-            }
-            catch (Exception ex)
-            {
-                return StatusCode(500, ex.Message);
+                return Ok(false);
             }
         }
 

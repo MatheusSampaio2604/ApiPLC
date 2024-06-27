@@ -21,13 +21,32 @@ namespace Application.Services
         private async Task EnsureConnectedAsync()
         {
             if (!_plc.IsConnected)
-                await Task.Run(() => _plc.Open());
+                await ConnectAsync();
         }
 
         public async Task ConnectAsync()
         {
-            await Task.Run(() => _plc.Open());
+            var cts = new CancellationTokenSource(TimeSpan.FromSeconds(15));
+            try
+            {
+                var connectTask = Task.Run(() => _plc.Open(), cts.Token);
+                var completedTask = await Task.WhenAny(connectTask, Task.Delay(Timeout.Infinite, cts.Token));
+
+                if (completedTask == connectTask)
+                {
+                    await connectTask; 
+                }
+                else
+                {
+                    throw new TimeoutException("A conexão com o PLC atingiu o tempo limite de 15 segundos.");
+                }
+            }
+            finally
+            {
+                cts.Dispose();
+            }
         }
+
 
         public void Disconnect()
         {

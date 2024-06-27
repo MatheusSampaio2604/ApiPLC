@@ -16,10 +16,7 @@ namespace API
 
             // Add services to the container.
 
-            builder.WebHost.ConfigureKestrel((context, options) =>
-            {
-                options.Configure(context.Configuration.GetSection("Kestrel"));
-            });
+            builder.WebHost.UseUrls("http://localhost:5000");
 
             builder.Services.AddControllers();
 
@@ -27,10 +24,13 @@ namespace API
             builder.Services.AddSingleton<InterPlcService, PlcService>();
             builder.Services.AddTransient<InterJsonService, JsonService>();
 
-            builder.Services.AddSingleton<IPlcsJsonRepository, PlcsJsonRepositoy>(provider => new PlcsJsonRepositoy(Path.Combine(Directory.GetCurrentDirectory(), "..", "Infrastructure", "Archives", "PlcsInUse.json")));
-            builder.Services.AddSingleton<IPlcSettingsJsonRepository, PlcSettingsJsonRepository>(provider => new PlcSettingsJsonRepository(Path.Combine(Directory.GetCurrentDirectory(), "..", "Infrastructure", "Archives", "PlcSetting.json")));
-
-
+#if DEBUG
+            builder.Services.AddSingleton<IPlcsJsonRepository, PlcsJsonRepositoy>(provider => new PlcsJsonRepositoy(Path.Combine(Directory.GetCurrentDirectory(), "..", "Domain", "Archives", "PlcsInUse.json")));
+            builder.Services.AddSingleton<IPlcSettingsJsonRepository, PlcSettingsJsonRepository>(provider => new PlcSettingsJsonRepository(Path.Combine(Directory.GetCurrentDirectory(), "..", "Domain", "Archives", "PlcSetting.json")));
+#elif RELEASE
+            builder.Services.AddSingleton<IPlcsJsonRepository, PlcsJsonRepositoy>(provider => new PlcsJsonRepositoy("home/jetson/publishui/PlcsInUse.json"));
+            builder.Services.AddSingleton<IPlcSettingsJsonRepository, PlcSettingsJsonRepository>(provider => new PlcSettingsJsonRepository("home/jetson/publishui/PlcSetting.json"));
+#endif
             // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
             builder.Services.AddEndpointsApiExplorer();
             builder.Services.AddSwaggerGen();
@@ -53,8 +53,8 @@ namespace API
 
             //app.UseHttpsRedirection();
 
-            app.UseAuthorization();
-            app.UseAuthentication();
+            //app.UseAuthorization();
+            //app.UseAuthentication();
 
             app.MapControllers();
 

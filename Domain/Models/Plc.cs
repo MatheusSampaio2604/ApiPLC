@@ -22,7 +22,7 @@
     {
         public required string AddressPlc { get; set; }
         public required string Type { get; set; }
-        public object? Value { get; set; }
+        public string? Value { get; set; }
     }
 
     public class PlcsInUse
@@ -31,7 +31,7 @@
         public required string Name { get; set; }
         public required string AddressPlc { get; set; }
         public required string Type { get; set; }
-        public object? Value { get; set; }
+        public string? Value { get; set; }
 
     }
 
