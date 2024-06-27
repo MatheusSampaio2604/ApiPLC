@@ -56,5 +56,19 @@ namespace Domain.Repository
             string jsonString = File.ReadAllText(_filePath);
             return JsonSerializer.Deserialize<List<PlcsInUse>>(jsonString);
         }
+
+        public void Delete(int id)
+        {
+            List<PlcsInUse?> existingItems = Load() ?? [];
+
+            PlcsInUse? itemToDelete = existingItems.FirstOrDefault(i => i.Id == id);
+            if (itemToDelete != null)
+            {
+                existingItems.Remove(itemToDelete);
+
+                string jsonString = JsonSerializer.Serialize(existingItems);
+                File.WriteAllText(_filePath, jsonString);
+            }
+        }
     }
 }

@@ -59,8 +59,13 @@ namespace Application.Services
 
         public void UpdateSettingsPlc(PlcSettings settings)
         {
+            
             _iPlcSettingsRepository.UpdateSettingsPlc(settings);
         }
 
+        public void DeleteTagInList(int id)
+        {
+            _iPlcsRepository.Delete(id);
+        }
     }
 }

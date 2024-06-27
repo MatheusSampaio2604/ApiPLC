@@ -14,5 +14,7 @@ namespace Domain.Repository.Interface
     {
         void Save(List<PlcsInUse> obj);
         List<PlcsInUse?> Load();
+
+        void Delete(int id);
     }
 }

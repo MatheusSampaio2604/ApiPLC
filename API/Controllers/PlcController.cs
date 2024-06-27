@@ -81,7 +81,7 @@ namespace API.Controllers
             object data = Empty;
             bool result = false;
 
-            if (requests.Count ==0)
+            if (requests.Count == 0)
                 return BadRequest("Request cannot be null.");
 
             try
@@ -194,6 +194,20 @@ namespace API.Controllers
             }
         }
 
+        [HttpDelete("{id}/deleteTagList")]
+        public IActionResult DeleteTag(int id)
+        {
+            try
+            {
+                _interJsonService.DeleteTagInList(id);
+                return Ok(true);
+            }
+            catch
+            {
+                return Ok(false);
+            }
+        }
+
         /// <summary>
         /// 
         /// </summary>
@@ -204,6 +218,7 @@ namespace API.Controllers
         {
             try
             {
+                _plcService.Disconnect();
                 _interJsonService.UpdateSettingsPlc(settings);
                 return Ok(true);
             }

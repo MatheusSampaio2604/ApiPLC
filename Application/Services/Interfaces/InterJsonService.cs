@@ -12,6 +12,7 @@ namespace Application.Services.Interfaces
         void SaveItem(List<PlcsInUse> item);
         List<PlcsInUse?> LoadItem();
         void UpdateTag(int id, PlcsInUse updatedPlcConfigured);
+        void DeleteTagInList(int id);
 
 
         PlcSettings GetSettingsPlc();

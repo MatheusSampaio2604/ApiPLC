@@ -1,1 +1,1 @@
-[{"Id":1,"Name":"test.TagNameTester","AddressPlc":"M0:00","Type":"bool","Value":"true"},{"Id":2,"Name":"more_tag_tester.3","AddressPlc":"M1:01","Type":"bool","Value":"true"},{"Id":3,"Name":"test.TagNameTester3","AddressPlc":"N2:12","Type":"double","Value":"47.5"},{"Id":4,"Name":"nameTester.2","AddressPlc":"192.168.0.3","Type":"double","Value":"50.05"},{"Id":5,"Name":"testName.01","AddressPlc":"Q3:76","Type":"int","Value":"50000"}]
+[{"Id":1,"Name":"testeDynamic","AddressPlc":"A0:01","Type":"bool","Value":"true"}]

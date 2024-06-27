@@ -13,7 +13,7 @@ namespace Application.Services
         public PlcService(IPlcSettingsJsonRepository plcSettingsRepository)
         {
             PlcSettings settings = plcSettingsRepository.GetSettingsPlc();
-            
+
             CpuType cpuType = (CpuType)Enum.Parse(typeof(CpuType), settings.CpuType, true);
             _plc = new Plc(cpuType, settings.Ip1, settings.Rack, settings.Slot);
         }
@@ -26,6 +26,8 @@ namespace Application.Services
 
         public async Task ConnectAsync()
         {
+            Disconnect();
+
             var cts = new CancellationTokenSource(TimeSpan.FromSeconds(15));
             try
             {
@@ -34,7 +36,7 @@ namespace Application.Services
 
                 if (completedTask == connectTask)
                 {
-                    await connectTask; 
+                    await connectTask;
                 }
                 else
                 {
@@ -50,7 +52,8 @@ namespace Application.Services
 
         public void Disconnect()
         {
-            _plc.Close();
+            if (_plc.IsConnected)
+                _plc.Close();
         }
 
         public async Task<T?> ReadAsync<T>(string addressplc)
@@ -67,7 +70,7 @@ namespace Application.Services
                 await Task.Run(() => _plc.Write(addressplc, value));
                 return true;
             }
-            catch (Exception)
+            catch
             {
                 return false;
             }
