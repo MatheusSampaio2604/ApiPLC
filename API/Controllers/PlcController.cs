@@ -31,8 +31,9 @@ namespace API.Controllers
         {
             try
             {
-                await _plcService.ConnectAsync();
-                return Ok(true);
+                bool resp = await _plcService.ConnectAsync();
+
+                return Ok(resp);
             }
             catch (Exception)
             {

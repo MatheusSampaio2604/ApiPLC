@@ -18,14 +18,16 @@ namespace Application.Services
             _plc = new Plc(cpuType, settings.Ip1, settings.Rack, settings.Slot);
         }
 
+
         private async Task EnsureConnectedAsync()
         {
             if (!_plc.IsConnected)
                 await ConnectAsync();
         }
 
-        public async Task ConnectAsync()
+        public async Task<bool> ConnectAsync()
         {
+
             Disconnect();
 
             var cts = new CancellationTokenSource(TimeSpan.FromSeconds(15));
@@ -37,10 +39,12 @@ namespace Application.Services
                 if (completedTask == connectTask)
                 {
                     await connectTask;
+                    return true;
                 }
                 else
                 {
-                    throw new TimeoutException("A conexão com o PLC atingiu o tempo limite de 15 segundos.");
+                    _plc.Close();
+                    return false;
                 }
             }
             finally
@@ -70,10 +74,7 @@ namespace Application.Services
                 await Task.Run(() => _plc.Write(addressplc, value));
                 return true;
             }
-            catch
-            {
-                return false;
-            }
+            catch { return false; }
         }
 
         public async Task StartStop(string addressplc)
