@@ -1,10 +1,7 @@
-
-using Domain.Models;
 using Application.Services;
-using Domain.Repository.Interface;
-using Domain.Repository;
-using S7.Net.Types;
 using Application.Services.Interfaces;
+using Domain.Repository;
+using Domain.Repository.Interface;
 
 namespace API
 {

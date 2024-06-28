@@ -1,8 +1,6 @@
-﻿using Application.Services;
-using Application.Services.Interfaces;
+﻿using Application.Services.Interfaces;
 using Domain.Models;
 using Microsoft.AspNetCore.Mvc;
-using S7.Net.Types;
 
 namespace API.Controllers
 {

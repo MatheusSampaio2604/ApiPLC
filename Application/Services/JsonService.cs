@@ -1,15 +1,10 @@
 ﻿using Application.Services.Interfaces;
 using Domain.Models;
 using Domain.Repository.Interface;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace Application.Services
 {
-    public  class JsonService : InterJsonService
+    public class JsonService : InterJsonService
     {
         private readonly IPlcsJsonRepository _iPlcsRepository;
         private readonly IPlcSettingsJsonRepository _iPlcSettingsRepository;
@@ -59,7 +54,7 @@ namespace Application.Services
 
         public void UpdateSettingsPlc(PlcSettings settings)
         {
-            
+
             _iPlcSettingsRepository.UpdateSettingsPlc(settings);
         }
 

@@ -1,11 +1,6 @@
 ﻿using Domain.Models;
 using Domain.Repository.Interface;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
 using System.Text.Json;
-using System.Threading.Tasks;
 
 namespace Domain.Repository
 {
@@ -50,7 +45,7 @@ namespace Domain.Repository
 
         public List<PlcsInUse?> Load()
         {
-            if(!File.Exists(_filePath))
+            if (!File.Exists(_filePath))
                 return default;
 
             string jsonString = File.ReadAllText(_filePath);

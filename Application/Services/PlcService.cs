@@ -1,7 +1,6 @@
 ﻿using Application.Services.Interfaces;
 using Domain.Models;
 using Domain.Repository.Interface;
-using Microsoft.Extensions.Options;
 using S7.Net;
 
 namespace Application.Services
