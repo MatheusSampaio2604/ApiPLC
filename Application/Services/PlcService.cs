@@ -47,7 +47,7 @@ namespace Application.Services
                 }
                 else
                 {
-                    throw new TimeoutException("A conexão com o PLC atingiu o tempo limite de 15 segundos.");
+                    throw new TimeoutException("The connection to the PLC has timed out at 15 seconds.");
                 }
             }
             finally
