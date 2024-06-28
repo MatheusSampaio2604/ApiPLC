@@ -31,13 +31,13 @@ namespace API.Controllers
         {
             try
             {
-                bool resp = await _plcService.ConnectAsync();
+                await _plcService.ConnectAsync();
 
-                return Ok(resp);
+                return Ok(true);
             }
-            catch (Exception)
+            catch (Exception e)
             {
-                return Ok(false);
+                return BadRequest(e.Message);
             }
         }
 

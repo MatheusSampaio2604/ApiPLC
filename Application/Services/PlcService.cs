@@ -8,16 +8,22 @@ namespace Application.Services
 {
     public class PlcService : InterPlcService
     {
-        private readonly Plc _plc;
+        private readonly IPlcSettingsJsonRepository _plcSettingsRepository;
+        private Plc _plc;
 
         public PlcService(IPlcSettingsJsonRepository plcSettingsRepository)
         {
-            PlcSettings settings = plcSettingsRepository.GetSettingsPlc();
+            _plcSettingsRepository = plcSettingsRepository;
+            UpdatePlcSettings();
+        }
+
+        private void UpdatePlcSettings()
+        {
+            PlcSettings settings = _plcSettingsRepository.GetSettingsPlc();
 
             CpuType cpuType = (CpuType)Enum.Parse(typeof(CpuType), settings.CpuType, true);
             _plc = new Plc(cpuType, settings.Ip1, settings.Rack, settings.Slot);
         }
-
 
         private async Task EnsureConnectedAsync()
         {
@@ -25,10 +31,10 @@ namespace Application.Services
                 await ConnectAsync();
         }
 
-        public async Task<bool> ConnectAsync()
+        public async Task ConnectAsync()
         {
-
             Disconnect();
+            UpdatePlcSettings();
 
             var cts = new CancellationTokenSource(TimeSpan.FromSeconds(15));
             try
@@ -39,12 +45,10 @@ namespace Application.Services
                 if (completedTask == connectTask)
                 {
                     await connectTask;
-                    return true;
                 }
                 else
                 {
-                    _plc.Close();
-                    return false;
+                    throw new TimeoutException("A conexão com o PLC atingiu o tempo limite de 15 segundos.");
                 }
             }
             finally

@@ -1,1 +1,23 @@
-[{"Id":1,"Name":"testeDynamic","AddressPlc":"A0:01","Type":"bool","Value":"false"},{"Id":2,"Name":"teste_dot_88","AddressPlc":"B1:01","Type":"double","Value":"7.51"},{"Id":3,"Name":"new_iten_120","AddressPlc":"X8:70","Type":"int","Value":"50"}]
+[
+  {
+    "Id": 1,
+    "Name": "testeDynamic",
+    "AddressPlc": "A0:01",
+    "Type": "bool",
+    "Value": "false"
+  },
+  {
+    "Id": 2,
+    "Name": "teste_dot_88",
+    "AddressPlc": "B1:01",
+    "Type": "double",
+    "Value": "0"
+  },
+  {
+    "Id": 3,
+    "Name": "new_iten_120",
+    "AddressPlc": "X8:70",
+    "Type": "int",
+    "Value": "0"
+  }
+]
