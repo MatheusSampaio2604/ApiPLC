@@ -5,7 +5,7 @@ namespace Domain.Repository.Interface
     /// <summary>
     /// In program.cs, this interface service is only for "PlcsInUse.Json"
     /// </summary>
-    public interface IPlcsJsonRepository
+    public interface IPlcListRepository
     {
         void Save(List<PlcsInUse> obj);
         List<PlcsInUse?> Load();

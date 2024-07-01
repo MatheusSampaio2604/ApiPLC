@@ -17,16 +17,18 @@ namespace API
 
             builder.Services.AddControllers();
 
-            //builder.Services.Configure<PlcSettings>(builder.Configuration.GetSection("PlcSettings"));
             builder.Services.AddSingleton<InterPlcService, PlcService>();
-            builder.Services.AddTransient<InterJsonService, JsonService>();
-
+            builder.Services.AddSingleton<InterJsonService, JsonService>();
+            builder.Services.AddSingleton<InterConfigureOptionsService, ConfigureOptionsService>(); 
 #if DEBUG
-            builder.Services.AddSingleton<IPlcsJsonRepository, PlcsJsonRepositoy>(provider => new PlcsJsonRepositoy(Path.Combine(Directory.GetCurrentDirectory(), "..", "Domain", "Archives", "PlcsInUse.json")));
-            builder.Services.AddSingleton<IPlcSettingsJsonRepository, PlcSettingsJsonRepository>(provider => new PlcSettingsJsonRepository(Path.Combine(Directory.GetCurrentDirectory(), "..", "Domain", "Archives", "PlcSetting.json")));
+            builder.Services.AddSingleton<IPlcListRepository, PlcsListRepositoy>(provider => new PlcsListRepositoy(Path.Combine(Directory.GetCurrentDirectory(), "..", "Domain", "Archives", "PlcsInUse.json")));
+            builder.Services.AddSingleton<IPlcSettingsRepository, PlcSettingsRepository>(provider => new PlcSettingsRepository(Path.Combine(Directory.GetCurrentDirectory(), "..", "Domain", "Archives", "PlcSetting.json")));
+            builder.Services.AddSingleton<IConfigureOptionsRepository, ConfigureOptionsRepository>(provider => new ConfigureOptionsRepository(Path.Combine(Directory.GetCurrentDirectory(), "..", "Domain", "Archives", "ConfigureOptions.json")));
+
 #elif RELEASE
             builder.Services.AddSingleton<IPlcsJsonRepository, PlcsJsonRepositoy>(provider => new PlcsJsonRepositoy("/home/jetson/publish/publishdrv/PlcsInUse.json"));
             builder.Services.AddSingleton<IPlcSettingsJsonRepository, PlcSettingsJsonRepository>(provider => new PlcSettingsJsonRepository("/home/jetson/publish/publishdrv/PlcSetting.json"));
+            builder.Services.AddSingleton<IConfigureOptionsRepository, ConfigureOptionsRepository>(provider => new ConfigureOptionsRepository("/home/jetson/publish/publishdrv/ConfigureOptions.json"));
 #endif
 
             // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle

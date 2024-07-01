@@ -6,10 +6,10 @@ namespace Application.Services
 {
     public class JsonService : InterJsonService
     {
-        private readonly IPlcsJsonRepository _iPlcsRepository;
-        private readonly IPlcSettingsJsonRepository _iPlcSettingsRepository;
+        private readonly IPlcListRepository _iPlcsRepository;
+        private readonly IPlcSettingsRepository _iPlcSettingsRepository;
 
-        public JsonService(IPlcsJsonRepository iPlcsRepository, IPlcSettingsJsonRepository plcSettingsRepository)
+        public JsonService(IPlcListRepository iPlcsRepository, IPlcSettingsRepository plcSettingsRepository)
         {
             _iPlcsRepository = iPlcsRepository;
             _iPlcSettingsRepository = plcSettingsRepository;

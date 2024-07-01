@@ -1,0 +1,15 @@
+{
+  "CpuTypes": [
+    { "Name": "S7200" },
+    { "Name": "Logo0BA8" },
+    { "Name": "S7200Smart" },
+    { "Name": "S7300" },
+    { "Name": "S7400" },
+    { "Name": "S71200" },
+    { "Name": "S71500" }
+  ],
+  "Drivers": [
+    { "Name": "ROCKWELL" },
+    { "Name": "SIEMENS" }
+  ]
+}

@@ -1,14 +1,6 @@
 ﻿namespace Domain.Models
 {
-    public class PlcSettings
-    {
-        public required string Ip1 { get; set; }
-        public required string CpuType { get; set; }
-        public required short Rack { get; set; }
-        public required short Slot { get; set; }
-        public required string Driver { get; set; }
-    }
-
+   
     public class PlcSettingsWrapper
     {
         public required PlcSettings PlcSettings { get; set; }
@@ -26,15 +18,9 @@
         public string? Value { get; set; }
     }
 
-    public class PlcsInUse
+    public class ConfigureOptionsWrapper
     {
-        public int Id { get; set; }
-        public required string Name { get; set; }
-        public required string AddressPlc { get; set; }
-        public required string Type { get; set; }
-        public string? Value { get; set; }
-
+        public List<Drivers>? Drivers { get; set; }
+        public List<CpuTypes>? CpuTypes { get; set; }
     }
-
-
 }

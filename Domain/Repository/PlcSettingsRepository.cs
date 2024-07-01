@@ -7,11 +7,11 @@ namespace Domain.Repository
     /// <summary>
     /// In program.cs, this service is only for "PlcSetting.Json"
     /// </summary>
-    public class PlcSettingsJsonRepository : IPlcSettingsJsonRepository
+    public class PlcSettingsRepository : IPlcSettingsRepository
     {
         private readonly string _filePath;
 
-        public PlcSettingsJsonRepository(string filePath)
+        public PlcSettingsRepository(string filePath)
         {
             _filePath = filePath;
         }

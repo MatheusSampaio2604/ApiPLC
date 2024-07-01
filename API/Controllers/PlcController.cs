@@ -65,8 +65,8 @@ namespace API.Controllers
         [HttpGet("read/{addressplc}")]
         public async Task<IActionResult> Read(string addressplc)
         {
-            object? result = await _plcService.ReadAsync<object>(addressplc);
-            return Ok(result);
+            
+            return Ok(await _plcService.ReadAsync<object>(addressplc));
         }
 
         /// <summary>
@@ -98,11 +98,9 @@ namespace API.Controllers
                         case "double":
                             if (double.TryParse(request.Value?.ToString(), out double parsedDouble)) data = parsedDouble;
                             break;
-
                         default:
                             return BadRequest("Unsupported type.");
                     }
-
                     result = await _plcService.WriteAsync(request.AddressPlc, data);
                 }
                 return Ok(result);
@@ -112,7 +110,6 @@ namespace API.Controllers
                 return StatusCode(500, $"Internal server error: {ex.Message}");
             }
         }
-
 
         /// <summary>
         /// Toggles between values ​​0 and 1
@@ -142,10 +139,7 @@ namespace API.Controllers
         {
             try
             {
-                List<PlcsInUse?> plcConfigureds = _interJsonService.LoadItem();
-
-
-                return Ok(plcConfigureds);
+                return Ok(_interJsonService.LoadItem());
             }
             catch (Exception e)
             {
@@ -174,7 +168,7 @@ namespace API.Controllers
         }
 
         /// <summary>
-        /// Up
+        /// Update tag in list
         /// </summary>
         /// <param name="id"></param>
         /// <param name="plc"></param>
@@ -236,8 +230,7 @@ namespace API.Controllers
         {
             try
             {
-                PlcSettings data = _interJsonService.GetSettingsPlc();
-                return Ok(data);
+                return Ok(_interJsonService.GetSettingsPlc());
             }
             catch (ArgumentException ex)
             {

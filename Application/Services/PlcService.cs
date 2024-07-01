@@ -7,10 +7,10 @@ namespace Application.Services
 {
     public class PlcService : InterPlcService
     {
-        private readonly IPlcSettingsJsonRepository _plcSettingsRepository;
+        private readonly IPlcSettingsRepository _plcSettingsRepository;
         private Plc _plc;
 
-        public PlcService(IPlcSettingsJsonRepository plcSettingsRepository)
+        public PlcService(IPlcSettingsRepository plcSettingsRepository)
         {
             _plcSettingsRepository = plcSettingsRepository;
             UpdatePlcSettings();
