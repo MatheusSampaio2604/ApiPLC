@@ -18,7 +18,7 @@ namespace Domain.Repository
             _filePath = filePath;
         }
 
-        public ConfigureOptionsWrapper? GetConfigureOptions()
+        public ConfigureOptionsWrapper? GetAllConfigureOptions()
         {
             var json = File.ReadAllText(_filePath);
             return JsonSerializer.Deserialize<ConfigureOptionsWrapper>(json);

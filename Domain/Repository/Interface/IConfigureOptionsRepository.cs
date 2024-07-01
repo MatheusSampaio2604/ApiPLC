@@ -9,7 +9,7 @@ namespace Domain.Repository.Interface
 {
     public interface IConfigureOptionsRepository
     {
-        ConfigureOptionsWrapper GetConfigureOptions();
+        ConfigureOptionsWrapper GetAllConfigureOptions();
         List<Drivers>? GetDriversOptions();
         List<CpuTypes>? GetCpuTypesOptions();
     }

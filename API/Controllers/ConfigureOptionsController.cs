@@ -14,19 +14,6 @@ namespace API.Controllers
             _optionsService = optionsService;
         }
 
-        [HttpGet("GetAllConfigureOptions")]
-        public IActionResult GetAllConfigureOptions()
-        {
-            try
-            {
-                return Ok(_optionsService.GetConfigureOptions());
-            }
-            catch (Exception ex)
-            {
-                return BadRequest(ex.Message);
-            }
-        }
-
         [HttpGet("GetDriversOptions")]
         public IActionResult GetDriversOptions()
         {

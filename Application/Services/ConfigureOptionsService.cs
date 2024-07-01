@@ -18,9 +18,9 @@ namespace Application.Services
             _configureOptions = configureOptions;
         }
 
-        public ConfigureOptionsWrapper? GetConfigureOptions()
+        public ConfigureOptionsWrapper? GetAllConfigureOptions()
         {
-            return _configureOptions.GetConfigureOptions();
+            return _configureOptions.GetAllConfigureOptions();
         }
 
         public List<CpuTypes>? GetCpuTypesOptions()

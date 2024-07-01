@@ -9,7 +9,7 @@ namespace Application.Services.Interfaces
 {
     public interface InterConfigureOptionsService
     {
-        ConfigureOptionsWrapper? GetConfigureOptions();
+        ConfigureOptionsWrapper? GetAllConfigureOptions();
         List<Drivers>? GetDriversOptions();
         List<CpuTypes>? GetCpuTypesOptions();
     }
